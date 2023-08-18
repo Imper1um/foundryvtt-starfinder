@@ -164,7 +164,7 @@ export class DiceSFRPG {
     * @param {DialogOptions}        data.dialogOptions Modal dialog options
     */
     static async d20Roll({ event = new Event(''), parts, rollContext, title, speaker, flavor, advantage = true, rollOptions = {},
-        critical = 20, fumble = 1, chatMessage = true, onClose, dialogOptions }) {
+        critical = 20, fumble = 1, chatMessage = true, onClose, dialogOptions, tags = new Array() }) {
 
         flavor = `${title}${(flavor ? " <br> " + flavor : "")}`;
 
@@ -237,32 +237,21 @@ export class DiceSFRPG {
             finalFormula.formula = finalFormula.formula.endsWith("+") ? finalFormula.formula.substring(0, finalFormula.formula.length - 1).trim() : finalFormula.formula;
             const preparedRollExplanation = DiceSFRPG.formatFormula(finalFormula.formula);
 
-            const tags = [];
             if (rollOptions?.actionTarget) {
                 tags.push({ name: "actionTarget", text: game.i18n.format("SFRPG.Items.Action.ActionTarget.Tag", {actionTarget: rollOptions.actionTargetSource[rollOptions.actionTarget]}) });
             }
 
             const rollObject = Roll.create(finalFormula.finalRoll, { breakdown: preparedRollExplanation, tags: tags });
             rollObject.options.rollOptions = rollOptions;
-            let roll = await rollObject.evaluate({async: true});
+            const roll = await rollObject.evaluate({async: true});
 
             // Flag critical thresholds
-            for (let d of roll.dice) {
+            for (const d of roll.dice) {
                 if (d.faces === 20) {
                     d.options.critical = critical;
                     d.options.fumble = fumble;
                 }
             }
-
-            // if (flavor) {
-            //     const chatData = {
-            //         type: CONST.CHAT_MESSAGE_TYPES.IC,
-            //         speaker: speaker,
-            //         content: flavor
-            //     };
-
-            //     ChatMessage.create(chatData, { chatBubble: true });
-            // }
 
             const itemContext = rollContext.allContexts['item'];
             const htmlData = [{ name: "rollNotes", value: itemContext?.system?.rollNotes }];
@@ -280,7 +269,8 @@ export class DiceSFRPG {
                     htmlData: htmlData,
                     rollType: "normal",
                     rollOptions: rollOptions,
-                    rollDices: finalFormula.rollDices
+                    rollDices: finalFormula.rollDices,
+                    tags: tags
                 };
 
                 try {
@@ -299,7 +289,8 @@ export class DiceSFRPG {
                     roll: roll,
                     type: CONST.CHAT_MESSAGE_TYPES.ROLL,
                     sound: CONFIG.sounds.dice,
-                    flags: {rollOptions: rollOptions}
+                    flags: {rollOptions: rollOptions},
+                    tags: tags
                 };
 
                 messageData.content = await roll.render({ htmlData: htmlData, customTooltip: finalFormula.rollDices });
@@ -398,11 +389,11 @@ export class DiceSFRPG {
                 }
 
                 const rollObject = Roll.create(finalFormula.finalRoll, { breakdown, tags, skipUI: true });
-                let roll = await rollObject.evaluate({async: true});
+                const roll = await rollObject.evaluate({async: true});
                 roll.options.rollMode = rollMode;
 
                 // Flag critical thresholds
-                for (let d of roll.dice) {
+                for (const d of roll.dice) {
                     if (d.faces === 20) {
                         d.options.critical = critical;
                         d.options.fumble = fumble;
@@ -444,7 +435,7 @@ export class DiceSFRPG {
                     roll.options.rollMode = rollMode;
 
                     // Flag critical thresholds
-                    for (let d of roll.dice) {
+                    for (const d of roll.dice) {
                         if (d.faces === 20) {
                             d.options.critical = critical;
                             d.options.fumble = fumble;
@@ -504,7 +495,7 @@ export class DiceSFRPG {
         };
 
         /** @type {DamageType[]} */
-        let damageTypes = parts.reduce((acc, cur) => {
+        const damageTypes = parts.reduce((acc, cur) => {
             if (cur.types && !foundry.utils.isEmpty(cur.types)) {
                 const filteredTypes = Object.entries(cur.types).filter(type => type[1]);
                 const obj = { types: [], operator: "" };
@@ -595,7 +586,7 @@ export class DiceSFRPG {
 
             let damageTypeString = "";
             const tempParts = usedParts.reduce((arr, curr) => {
-                let obj = { formula: curr.formula, damage: 0, types: [], operator: curr.operator };
+                const obj = { formula: curr.formula, damage: 0, types: [], operator: curr.operator };
                 if (curr.types && !foundry.utils.isEmpty(curr.types)) {
                     for (const [key, isEnabled] of Object.entries(curr.types)) {
                         if (isEnabled) {
@@ -697,7 +688,7 @@ export class DiceSFRPG {
                         tags.push({ tag: "critical-effect", text: game.i18n.format("SFRPG.Rolls.Dice.CriticalEffect", {"criticalEffect": criticalData.effect })});
                     }
 
-                    let critRoll = criticalData.parts?.filter(x => x.formula?.trim().length > 0).map(x => x.formula)
+                    const critRoll = criticalData.parts?.filter(x => x.formula?.trim().length > 0).map(x => x.formula)
                         .join("+") ?? "";
                     if (critRoll.length > 0) {
                         finalFormula.finalRoll = finalFormula.finalRoll + " + " + critRoll;
@@ -726,7 +717,7 @@ export class DiceSFRPG {
             const preparedRollExplanation = DiceSFRPG.formatFormula(finalFormula.formula);
 
             const rollObject = Roll.create(finalFormula.finalRoll, { tags: tags, breakdown: preparedRollExplanation });
-            let roll = await rollObject.evaluate({async: true});
+            const roll = await rollObject.evaluate({async: true});
 
             // CRB pg. 240, < 1 damage returns 1 non-lethal damage.
             if (roll._total < 1) {
@@ -796,7 +787,7 @@ export class DiceSFRPG {
             }
 
             if (!useCustomCard && chatMessage) {
-                let rollContent = await roll.render({ htmlData: htmlData });
+                const rollContent = await roll.render({ htmlData: htmlData });
 
                 const messageData = {
                     flavor: finalFlavor,
@@ -871,9 +862,9 @@ export class DiceSFRPG {
     static highlightCriticalSuccessFailure(message, html, data) {
         if (!message.isRoll || !message.isContentVisible) return;
 
-        let roll = message.rolls[0];
+        const roll = message.rolls[0];
         if (!roll.dice.length) return;
-        for (let d of roll.dice) {
+        for (const d of roll.dice) {
             if (d.faces === 20 && d.results.length === 1) {
                 if (d.total >= (d.options.critical || 20)) html.find('.dice-total').addClass('success');
                 else if (d.total <= (d.options.fumble || 1)) html.find('.dice-total').addClass('failure');
@@ -1021,7 +1012,7 @@ export class DiceSFRPG {
     static async _calcStackingFormula(node, rollMods, bonus = null, actor = null) {
         let rootNode = node;
 
-        let stackModifiers = new StackModifiers();
+        const stackModifiers = new StackModifiers();
         const stackedMods = await stackModifiers.processAsync(rollMods.filter(mod => {
             if (mod.enabled) {
                 rootNode = this._removeModifierNodes(rootNode, mod);
