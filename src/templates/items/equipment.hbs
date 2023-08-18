@@ -1,4 +1,4 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<form class="{{cssClass}} flexcol {{#if options.editable }}editable{{else}}not-editable{{/if}}" autocomplete="off">
 
     {{!-- Item Sheet Header --}}
     {{> "systems/sfrpg/templates/items/parts/item-header.hbs"}}
@@ -11,7 +11,7 @@
     </nav>
 
     {{!-- Item Sheet Body --}}
-    <section class="sheet-body">
+    <section class="sheet-body ">
 
         {{!-- Description Tab --}}
         {{> "systems/sfrpg/templates/items/parts/item-description.hbs"}}
