@@ -292,7 +292,7 @@ export const registerSystemSettings = function() {
         });
     }
 	
-	const tokenTypes = {"Enemy", "Neutral", "Friendly", "Secret", "Hidden"};
+	const tokenTypes = ["Enemy", "Neutral", "Friendly", "Secret", "Hidden"];
 	const displayChoices = {
 		"GM": "SFRPG.Settings.CombatCards.DisplayValues.GM",
 		"Assistant": "SFRPG.Settings.CombatCards.DisplayValues.Assistant",

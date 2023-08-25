@@ -438,9 +438,6 @@ export class CombatSFRPG extends Combat {
 				round: this.round,
 				phase: localizedPhaseName,
 				combatType: localizedCombatName
-            },
-            footer: {
-                content: game.i18n.format(CombatSFRPG.chatCardsText.footer, {combatType: localizedCombatName, combatPhase: localizedPhaseName})
             }
         };
 
@@ -499,6 +496,7 @@ export class CombatSFRPG extends Combat {
         const localizedCombatName = this.getCombatName();
         const localizedPhaseName = game.i18n.format(eventData.newPhase.name);
 		
+		const newCombatant = eventData.newCombatant;
 		//-2 Secret, -1 Enemy, 0 Neutral, 1 Friendly
 		const tokenDisposition = newCombatant.token.disposition;
 		//True/False
@@ -506,7 +504,7 @@ export class CombatSFRPG extends Combat {
 		//Array {id: permission} - Permission: 3 = Owner
 		const tokenOwnership = newCombatant.actor.ownership;
 		
-		const filterPermission = "Enemy";
+		var filterPermission = "Enemy";
 		switch (tokenDisposition) {
 			case -2:
 				filterPermission = "Secret";
@@ -532,7 +530,7 @@ export class CombatSFRPG extends Combat {
 		var sendObfuscateCard = new Array();
 		var allSend = true;
 		
-		for (const user in game.users) {
+		for (const user of game.users.contents) {
 			var ownershipValue = tokenOwnership[user._id] || tokenOwnership["default"];
 			switch (user.role) {
 				case 4:
@@ -600,9 +598,6 @@ export class CombatSFRPG extends Combat {
 				phase: localizedPhaseName,
 				combatType: localizedCombatName,
 				turn: eventData.newCombatant.name
-            },
-            footer: {
-                content: game.i18n.format(CombatSFRPG.chatCardsText.footer, {combatType: localizedCombatName, combatPhase: localizedPhaseName})
             }
         };
 
@@ -613,7 +608,7 @@ export class CombatSFRPG extends Combat {
 		const obfuscateHtml = await renderTemplate(obfuscateTemplate, templateData);
 
         // Create the chat message
-		const chatWhisper = allSend ? sendFullCard : []:
+		const chatWhisper = allSend ? [] : sendFullCard;
 		
         const chatData = {
             type: CONST.CHAT_MESSAGE_TYPES.OTHER,

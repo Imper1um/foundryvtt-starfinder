@@ -8,8 +8,8 @@
         <h3 class="noborder">????'s Turn</h3>
     </div>
 
-    <footer class="card-footer">
-		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}} {{localize "SFRPG.Combat.Normal.Phases.1.Name"}}</div>{{/if}}
+    <footer class="card-footer" style="display:flex">
+		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}}</div>{{/if}}
 		{{#if body.phase}}<div style="flex:1" class="round-footer-item phase" data-phase="{{body.phase}}">{{localize "SFRPG.StarshipSheet.Actions.Header.Phase"}} {{body.phase}}</div>{{/if}}
     </footer>
 </div>
