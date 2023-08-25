@@ -18,7 +18,9 @@
         {{/if}}
     </div>
 
-    <footer class="card-footer">
-        {{footer.content}}
+    <footer class="card-footer" style="display:flex">
+		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}} </div>{{/if}}
+		{{#if body.phase}}<div style="flex:1" class="round-footer-item phase" data-phase="{{body.phase}}">{{body.phase}} {{localize "SFRPG.StarshipSheet.Actions.Header.Phase"}}</div>{{/if}}
+        {{#if footer.content}}<div style="flex:3" class="round-footer-item extraInfo">{{footer.content}}</div>{{/if}}
     </footer>
 </div>

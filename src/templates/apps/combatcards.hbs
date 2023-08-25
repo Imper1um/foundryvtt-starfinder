@@ -1,0 +1,119 @@
+<form>
+	<div class="form-group">
+        <label for="difficulty-display">{{localize "SFRPG.Settings.DifficultyDisplay.Name"}}</label>
+        <input type="checkbox" name="difficulty-display" id="difficulty-display" {{checked difficultyDisplay}}>
+        <p class="notes">{{localize "SFRPG.Settings.DifficultyDisplay.Hint"}}</p>
+    </div>
+
+	<div class="form-separator">
+		<h2>{{localize "SFRPG.Settings.CombatCards.ChatCardsHeader"}}</h2>
+	</div>
+	<div class="form-group">
+        <label for="chatcards-normal">{{localize "SFRPG.Settings.CombatCards.NormalName"}}</label>
+        <select name="chatcards-normal" id="chatcards-normal">
+            {{selectOptions chatcardsAvailable localize=true selected=chatcardsNormal }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.NormalHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="chatcards-starship">{{localize "SFRPG.Settings.CombatCards.StarshipName"}}</label>
+        <select name="chatcards-starship" id="chatcards-starship">
+            {{selectOptions chatcardsAvailable localize=true selected=chatcardsStarship }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.StarshipHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="chatcards-vehicle">{{localize "SFRPG.Settings.CombatCards.VehicleChaseName"}}</label>
+        <select name="chatcards-vehicle" id="chatcards-vehicle">
+            {{selectOptions chatcardsAvailable localize=true selected=chatcardsVehicle }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.VehicleChaseHint"}}</p>
+    </div>
+	<div class="form-separator">
+		<h2>{{localize "SFRPG.Settings.CombatCards.DisplayHeader"}}</h2>
+	</div>
+	<div class="form-group">
+        <label for="display-enemy">{{localize "SFRPG.Settings.CombatCards.EnemyDisplayName"}}</label>
+        <select name="display-enemy" id="display-enemy">
+            {{selectOptions displayAvailable localize=true selected=displayEnemy }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.EnemyDisplayHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="display-neutral">{{localize "SFRPG.Settings.CombatCards.NeutralDisplayName"}}</label>
+        <select name="display-neutral" id="display-neutral">
+            {{selectOptions displayAvailable localize=true selected=displayNeutral }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.NeutralDisplayHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="display-friendly">{{localize "SFRPG.Settings.CombatCards.FriendlyDisplayName"}}</label>
+        <select name="display-friendly" id="display-friendly">
+            {{selectOptions displayAvailable localize=true selected=displayFriendly }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.FriendlyDisplayHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="display-secret">{{localize "SFRPG.Settings.CombatCards.SecretDisplayName"}}</label>
+        <select name="display-secret" id="display-secret">
+            {{selectOptions displayAvailable localize=true selected=displaySecret }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.SecretDisplayHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="display-hidden">{{localize "SFRPG.Settings.CombatCards.HiddenDisplayName"}}</label>
+        <select name="display-hidden" id="display-hidden">
+            {{selectOptions displayAvailable localize=true selected=displayHidden }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.HiddenDisplayHint"}}</p>
+    </div>
+	<div class="form-separator">
+		<h2>{{localize "SFRPG.Settings.CombatCards.ObfuscateHeader"}}</h2>
+	</div>
+	<div class="form-group">
+        <label for="obfuscate-enemy">{{localize "SFRPG.Settings.CombatCards.EnemyObfuscateName"}}</label>
+        <select name="obfuscate-enemy" id="obfuscate-enemy">
+            {{selectOptions obfuscateAvailable localize=true selected=obfuscateEnemy }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.EnemyObfuscateHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="obfuscate-neutral">{{localize "SFRPG.Settings.CombatCards.NeutralObfuscateName"}}</label>
+        <select name="obfuscate-neutral" id="obfuscate-neutral">
+            {{selectOptions obfuscateAvailable localize=true selected=obfuscateNeutral }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.NeutralObfuscateHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="obfuscate-friendly">{{localize "SFRPG.Settings.CombatCards.FriendlyObfuscateName"}}</label>
+        <select name="obfuscate-friendly" id="obfuscate-friendly">
+            {{selectOptions obfuscateAvailable localize=true selected=obfuscateFriendly }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.FriendlyObfuscateHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="obfuscate-secret">{{localize "SFRPG.Settings.CombatCards.SecretObfuscateName"}}</label>
+        <select name="obfuscate-secret" id="obfuscate-secret">
+            {{selectOptions obfuscateAvailable localize=true selected=obfuscateSecret }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.SecretObfuscateHint"}}</p>
+    </div>
+	<div class="form-group">
+        <label for="obfuscate-hidden">{{localize "SFRPG.Settings.CombatCards.HiddenObfuscateName"}}</label>
+        <select name="obfuscate-hidden" id="obfuscate-hidden">
+            {{selectOptions obfuscateAvailable localize=true selected=obfuscateHidden }}
+        </select>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.HiddenObfuscateHint"}}</p>
+    </div>
+	
+    <div class="form-group">
+        <label for="display-owned">{{localize "SFRPG.Settings.CombatCards.DisplayOwnedName"}}</label>
+        <input type="checkbox" name="display-owned" id="display-owned" {{checked displayOwned}}>
+        <p class="notes">{{localize "SFRPG.Settings.CombatCards.DisplayOwnedHint"}}</p>
+    </div>
+    <footer class="sheet-footer flexrow">
+    <button type="submit" name="submit">
+        <i class="fa fa-check"></i> OK
+    </button>
+  </footer>
+</form>

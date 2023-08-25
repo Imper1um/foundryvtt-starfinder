@@ -2250,6 +2250,10 @@
                 "Name": "Collapse Item Cards in Chat"
             },
             "CombatCards": {
+				"ConfigureHint": "Configure options for combat cards.",
+				"ConfigureName": "Configure Combat Cards Settings",
+				"ConfigureLabel": "Combat Cards Settings",
+				"ChatCardsHeader": "Chat Cards Display",
                 "NormalHint": "Change which combat chat cards should be displayed during normal combat.",
                 "NormalName": "Normal combat",
                 "StarshipHint": "Change which combat chat cards should be displayed during starship combat.",
@@ -2262,7 +2266,43 @@
                     "RoundsTurns": "Rounds and turns"
                 },
                 "VehicleChaseHint": "Change which combat chat cards should be displayed during vehicle chases.",
-                "VehicleChaseName": "Vehicle chases"
+                "VehicleChaseName": "Vehicle chases",
+				"DisplayHeader": "Display Combat Cards",
+				"EnemyDisplayHint": "Change what is the minimum permission required to display combat cards for enemies.",
+				"EnemyDisplayName": "Enemies",
+				"NeutralDisplayHint": "Change what is the minimum permission required to display combat cards for neutral characters.",
+				"NeutralDisplayName": "Neutrals",
+				"FriendlyDisplayHint": "Change what is the minimum permission required to display combat cards for friendly characters.",
+				"FriendlyDisplayName": "Friendlies",
+				"SecretDisplayHint": "Change what is the minimum permission required to display combat cards for secret characters.",
+				"SecretDisplayName": "Secrets",
+				"HiddenDisplayHint": "Change what is the minimum permission required to display combat cards for characters that are hidden.",
+				"HiddenDisplayName": "Hidden",
+				"ObfuscateHeader": "Hide Names on Chat Cards",
+				"EnemyObfuscateHint": "Change what permissions hide the names of enemy combat cards.",
+				"EnemyObfuscateName": "Hide Enemy Names",
+				"NeutralObfuscateHint": "Change what permissions hide the names of neutral combat cards.",
+				"NeutralObfuscateName": "Hide Neutral Names",
+				"FriendlyObfuscateHint": "Change what permissions hide the names of friendly combat cards.",
+				"FriendlyObfuscateName": "Hide Friendly Names",
+				"SecretObfuscateHint": "Change what permissions hide the names of secret combat cards.",
+				"SecretObfuscateName": "Hide Secret Names",
+				"HiddenObfuscateHint": "Change what permissions hide the names of hidden combat cards.",
+				"HiddenObfuscateName": "Hide Hidden Names",
+				"DisplayOwnedHint": "If checked, users will always see full combat cards of tokens they own.",
+				"DisplayOwnedName": "Override for Owned",
+				"DisplayValues": {
+					"GM": "Game Master",
+					"Assistant": "Game Master and Assistant",
+					"Trusted": "Everyone except Normal Players",
+					"Player": "Everyone"
+				},
+				"ObfuscateValues": {
+					"Assistant": "Everyone except Game Master",
+					"Trusted": "Everyone except Game Master and Assistant",
+					"Player": "Only Normal Players",
+					"None": "No One"
+				}
             },
             "CombatTiebreaker": {
                 "Hint": "Automatically add the initiative modifier divided by 100 to the roll, to help with tie breakers.",
@@ -2334,6 +2374,7 @@
                 "Hint": "Enables the Galactic Trade subsystem, allowing the maximum BP on a ship to be 5% higher than normal, and adds BPs to the ship inventory as credits.",
                 "Name": "Enable Galactic Trade"
             },
+			
             "SFRPGTheme": {
                 "Hint": "When enabled, a few minor tweaks to Foundry's colours will be made to match Starfinder's colour scheme.",
                 "Name": "Custom SFRPG theme"

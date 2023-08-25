@@ -1,0 +1,15 @@
+<div class="sfrpg chat-card combat-card">
+    <header class="card-header flexrow">
+        <img src="icons/svg/mystery-man.svg" title="???" width="36" height="36"/>
+        <h3 class="item-name noborder">???</h3>
+    </header>
+
+    <div class="card-content">
+        <h3 class="noborder">????'s Turn</h3>
+    </div>
+
+    <footer class="card-footer" style="display:flex">
+		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}}</div>{{/if}}
+		{{#if body.phase}}<div style="flex:1" class="round-footer-item phase" data-phase="{{body.phase}}">{{localize "SFRPG.StarshipSheet.Actions.Header.Phase"}} {{body.phase}}</div>{{/if}}
+    </footer>
+</div>

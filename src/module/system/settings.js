@@ -1,4 +1,5 @@
 import FloatingNumberMenu from "../classes/floating-number-menu.js";
+import CombatCardMenu from "../classes/combat-card-menu.js";
 import { SFRPG } from "../config.js";
 import { ItemSFRPG } from "../item/item.js";
 
@@ -108,34 +109,9 @@ export const registerSystemSettings = function() {
         }
     });
 
-    game.settings.register("sfrpg", "difficultyDisplay", {
-        name: "SFRPG.Settings.DifficultyDisplay.Name",
-        hint: "SFRPG.Settings.DifficultyDisplay.Hint",
-        scope: "world",
-        config: true,
-        default: true,
-        type: Boolean,
-        onChange: () => ui.combat.render(false)
-    });
+    
 
-    for (const combatType of SFRPG.combatTypes) {
-        const capitalizedCombatType = combatType[0].toUpperCase() + combatType.slice(1);
-        game.settings.register("sfrpg", `${combatType}ChatCards`, {
-            name: `SFRPG.Settings.CombatCards.${capitalizedCombatType}Name`,
-            hint: `SFRPG.Settings.CombatCards.${capitalizedCombatType}Hint`,
-            scope: "world",
-            config: true,
-            default: "enabled",
-            type: String,
-            choices: {
-                "enabled": "SFRPG.Settings.CombatCards.Values.Enabled",
-                "roundsPhases": "SFRPG.Settings.CombatCards.Values.RoundsPhases",
-                "roundsTurns": "SFRPG.Settings.CombatCards.Values.RoundsTurns",
-                "roundsOnly": "SFRPG.Settings.CombatCards.Values.OnlyRounds",
-                "disabled": "SFRPG.Settings.CombatCards.Values.Disabled"
-            }
-        });
-    }
+    
 
     game.settings.register("sfrpg", "starshipActionsSource", {
         name: "SFRPG.Settings.StarshipActionsSource.Name",
@@ -277,4 +253,86 @@ export const registerSystemSettings = function() {
         type: String,
         default: "LIMITED"
     });
+	
+	//Combat Cards Settings
+	game.settings.registerMenu("sfrpg", "combatCards", {
+        name: "SFRPG.Settings.CombatCards.ConfigureName",
+        label: "SFRPG.Settings.CombatCards.ConfigureLabel",
+        hint: "SFRPG.Settings.CombatCards.ConfigureHint",
+        icon: "fas fa-swords",
+        type: CombatCardMenu
+    });
+	
+	game.settings.register("sfrpg", "difficultyDisplay", {
+        name: "SFRPG.Settings.DifficultyDisplay.Name",
+        hint: "SFRPG.Settings.DifficultyDisplay.Hint",
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+        onChange: () => ui.combat.render(false)
+    });
+	
+	for (const combatType of SFRPG.combatTypes) {
+        const capitalizedCombatType = combatType[0].toUpperCase() + combatType.slice(1);
+        game.settings.register("sfrpg", `${combatType}ChatCards`, {
+            name: `SFRPG.Settings.CombatCards.${capitalizedCombatType}Name`,
+            hint: `SFRPG.Settings.CombatCards.${capitalizedCombatType}Hint`,
+            scope: "world",
+            config: true,
+            default: "enabled",
+            type: String,
+            choices: {
+                "enabled": "SFRPG.Settings.CombatCards.Values.Enabled",
+                "roundsPhases": "SFRPG.Settings.CombatCards.Values.RoundsPhases",
+                "roundsTurns": "SFRPG.Settings.CombatCards.Values.RoundsTurns",
+                "roundsOnly": "SFRPG.Settings.CombatCards.Values.OnlyRounds",
+                "disabled": "SFRPG.Settings.CombatCards.Values.Disabled"
+            }
+        });
+    }
+	
+	const tokenTypes = ["Enemy", "Neutral", "Friendly", "Secret", "Hidden"];
+	const displayChoices = {
+		"GM": "SFRPG.Settings.CombatCards.DisplayValues.GM",
+		"Assistant": "SFRPG.Settings.CombatCards.DisplayValues.Assistant",
+		"Trusted": "SFRPG.Settings.CombatCards.DisplayValues.Trusted",
+		"Player": "SFRPG.Settings.CombatCards.DisplayValues.Player"
+	};
+	const obfuscateChoices = {
+		"Assistant": "SFRPG.Settings.CombatCards.ObfuscateValues.Assistant",
+		"Trusted": "SFRPG.Settings.CombatCards.ObfuscateValues.Trusted",
+		"Player": "SFRPG.Settings.CombatCards.ObfuscateValues.Player",
+		"None": "SFRPG.Settings.CombatCards.ObfuscateValues.None"
+	};
+	for (const tokenType of tokenTypes) {
+		game.settings.register("sfrpg", `${tokenType}DisplayCombatCards`, {
+			name: `SFRPG.Settings.CombatCards.DisplayCombatCards.${tokenType}Name`,
+            hint: `SFRPG.Settings.CombatCards.DisplayCombatCards.${tokenType}Hint`,
+            scope: "world",
+            config: true,
+            default: "enabled",
+            type: String,
+            choices: displayChoices
+        });
+		game.settings.register("sfrpg", `${tokenType}ObfuscateCombatCards`, {
+			name: `SFRPG.Settings.CombatCards.ObfuscateCombatCards.${tokenType}Name`,
+            hint: `SFRPG.Settings.CombatCards.ObfuscateCombatCards.${tokenType}Hint`,
+            scope: "world",
+            config: true,
+            default: "enabled",
+            type: String,
+            choices: obfuscateChoices
+        });
+	}
+	
+	game.settings.register("sfrpg", "displayOwnedCombatCards", {
+        name: "SFRPG.Settings.CombatCards.DisplayOwnedName",
+        hint: "SFRPG.Settings.CombatCards.DisplayOwnedHint",
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean
+    });
+	
 };
