@@ -2,20 +2,18 @@
 
 This is a game system definition of the Starfinder RPG for the awesome [Foundry Virtual Tabletop](http://foundryvtt.com/).
 
-## Join the discussion
+## About this Fork
 
-If you have quesions or just want to chat about all things Starfinder, then join us on the official FoundryVTT discord server [here](https://discord.gg/QyAeMy4Dyu).
+This fork is a custom fork I made for the original Foundry VTT Starfinder 1st Edition system. There were a number of things that, as a programmer, I had some annoyances that they were like a certain way.
+
+I keep this fork up-to-date with the latest of the primary project *but* this fork will have different changes if you go into the `new-features` branch, which includes all of the individual changes I have made to customize Starfinder.
+
+Stuff that exists in `new-features` may or may not get Pull Requested into main, but, seeing as the main developers of Starfinder RPG Foundry don't exactly monitor the code frequently (there are pull requests from !!!months!!! ago), I'm not hopeful that any changes will be made.
+
+If you wish to contribute to this fork, I'll accept Pull Requests that are acceptable.
 
 ## Version support table
-If you wish to use Starfinder with older versions of FoundryVTT, the following table will help:
-- FoundryVTT v0.5.5 or earlier: The latest supported Starfinder system version is v0.2.2
-- FoundryVTT v0.5.6 till v0.6.6: The latest supported Starfinder system version is v0.5.1
-- FoundryVTT v0.7.0 till v0.7.10: The latest supported Starfinder system version is v0.10.0.0
-- FoundryVTT v0.8.0 till v9.269: The latest supported Starfinder system version is v0.18.3
-- FoundryVTT v9.269 till v9.280: The latest supported Starfinder system version is v0.19.2
-- FoundryVTT v10 and up: The latest supported Starfinder system version is [the current version](https://github.com/foundryvtt-starfinder/foundryvtt-starfinder/releases/latest)
-
-Please keep in mind the Starfinder system identifier changed with Starfinder system version v0.3 from 'starfinder' to 'sfrpg'. If you have a world older than this version, you will have to update your world.json file to reflect this, or your world will not load.
+This code only goes back as Foundry v11. I can't provide pre-v11 support for any of this code.
 
 ## Installation
 1. Download the current release that is compatible with your version of Foundry VTT from the [releases tab](https://github.com/wildj79/foundryvtt-starfinder/releases). Unzip the files and place them in the data folder for your installation. See [https://foundryvtt.com/article/configuration#where-user-data](https://foundryvtt.com/article/configuration#where-user-data) for more details about where your data is stored for Foundry. Make sure to put the files in a folder named `sfrpg` in the `systems` directory. _NOTE: This is no longer the perfered method of installing modules. Please use the module browser within foundry._
