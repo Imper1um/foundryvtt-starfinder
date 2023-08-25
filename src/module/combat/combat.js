@@ -430,12 +430,14 @@ export class CombatSFRPG extends Combat {
         const speakerName = game.i18n.format(CombatSFRPG.chatCardsText.speaker.GM);
         const templateData = {
             header: {
-                image: "icons/svg/mystery-man.svg",
                 name: game.i18n.format(CombatSFRPG.chatCardsText.round.headerName, {round: this.round})
             },
             body: {
                 header: game.i18n.format(CombatSFRPG.chatCardsText.round.bodyHeader),
-                headerColor: CombatSFRPG.colors.round
+                headerColor: CombatSFRPG.colors.round,
+				round: this.round,
+				phase: localizedPhaseName,
+				combatType: localizedCombatName
             },
             footer: {
                 content: game.i18n.format(CombatSFRPG.chatCardsText.footer, {combatType: localizedCombatName, combatPhase: localizedPhaseName})
@@ -443,7 +445,7 @@ export class CombatSFRPG extends Combat {
         };
 
         // Render the chat card template
-        const template = `systems/sfrpg/templates/chat/combat-card.hbs`;
+        const template = `systems/sfrpg/templates/chat/round-marker.hbs`;
         const html = await renderTemplate(template, templateData);
 
         // Create the chat message
@@ -453,7 +455,7 @@ export class CombatSFRPG extends Combat {
             content: html
         };
 
-        await ChatMessage.create(chatData, { displaySheet: false });
+        await ChatMessage.create(chatData, { displaySheet: false, markerType:"round" });
     }
 
     async _printNewPhaseChatCard(eventData) {
@@ -464,7 +466,6 @@ export class CombatSFRPG extends Combat {
         const speakerName = game.i18n.format(CombatSFRPG.chatCardsText.speaker.GM);
         const templateData = {
             header: {
-                image: "icons/svg/mystery-man.svg",
                 name: game.i18n.format(CombatSFRPG.chatCardsText.phase.headerName, {phase: localizedPhaseName})
             },
             body: {
@@ -473,15 +474,15 @@ export class CombatSFRPG extends Combat {
                 message: {
                     title: game.i18n.format(CombatSFRPG.chatCardsText.phase.messageTitle),
                     body: game.i18n.format(eventData.newPhase.description || "")
-                }
-            },
-            footer: {
-                content: game.i18n.format(CombatSFRPG.chatCardsText.footer, {combatType: localizedCombatName, combatPhase: localizedPhaseName})
+                },
+				round: this.round,
+				phase: localizedPhaseName,
+				combatType: localizedCombatName
             }
         };
 
         // Render the chat card template
-        const template = `systems/sfrpg/templates/chat/combat-card.hbs`;
+        const template = `systems/sfrpg/templates/chat/phase-marker.hbs`;
         const html = await renderTemplate(template, templateData);
 
         // Create the chat message
@@ -491,15 +492,98 @@ export class CombatSFRPG extends Combat {
             content: html
         };
 
-        await ChatMessage.create(chatData, { displaySheet: false });
+        await ChatMessage.create(chatData, { displaySheet: false, markerType:"phase" });
     }
 
     async _printNewTurnChatCard(eventData) {
         const localizedCombatName = this.getCombatName();
         const localizedPhaseName = game.i18n.format(eventData.newPhase.name);
+		
+		//-2 Secret, -1 Enemy, 0 Neutral, 1 Friendly
+		const tokenDisposition = newCombatant.token.disposition;
+		//True/False
+		const tokenHidden = newCombatant.token.hidden;
+		//Array {id: permission} - Permission: 3 = Owner
+		const tokenOwnership = newCombatant.actor.ownership;
+		
+		const filterPermission = "Enemy";
+		switch (tokenDisposition) {
+			case -2:
+				filterPermission = "Secret";
+				break;
+			case -1:
+				filterPermission = "Enemy";
+				break;
+			case 0:
+				filterPermission = "Neutral";
+				break;
+			case 1:
+				filterPermission = "Friendly";
+				break;
+		}
+		if (tokenHidden) {
+			filterPermission = "Hidden";
+		}
+		const allowOwned = game.settings.get("sfrpg", "displayOwnedCombatCards");
+		const displayPermission = game.settings.get("sfrpg", `${filterPermission}DisplayCombatCards`);
+		const obfuscatePermission = game.settings.get("sfrpg", `${filterPermission}ObfuscateCombatCards`);
+		
+		var sendFullCard = new Array();
+		var sendObfuscateCard = new Array();
+		var allSend = true;
+		
+		for (const user in game.users) {
+			var ownershipValue = tokenOwnership[user._id] || tokenOwnership["default"];
+			switch (user.role) {
+				case 4:
+					//GMs always get the full card.
+					sendFullCard.push(user._id);
+					continue;
+				case 3:
+					//Assistant GM.
+					if (ownershipValue === 4 && allowOwned) {
+						sendFullCard.push(user._id);
+					} else if (obfuscatePermission === "Assistant" || obfuscatePermission === "Trusted" || obfuscatePermission === "Player") {
+						allSend = false;
+						sendObfuscateCard.push(user._id);
+					} else if (displayPermission === "Assistant" || displayPermission === "Trusted" || displayPermission === "Player") {
+						sendFullCard.push(user._id);
+					} else {
+						allSend = false;
+					}
+					continue;
+				case 2:
+					//Trusted Player.
+					if (ownershipValue === 4 && allowOwned) {
+						sendFullCard.push(user._id);
+					} else if (obfuscatePermission === "Trusted" || obfuscatePermission === "Player") {
+						allSend = false;
+						sendObfuscateCard.push(user._id);
+					} else if (displayPermission === "Trusted" || displayPermission === "Player") {
+						sendFullCard.push(user._id);
+					} else {
+						allSend = false;
+					}
+					continue;
+				case 1:
+					//Player.
+					if (ownershipValue === 4 && allowOwned) {
+						sendFullCard.push(user._id);
+					} else if (obfuscatePermission === "Player") {
+						allSend = false;
+						sendObfuscateCard.push(user._id);
+					} else if (displayPermission === "Player") {
+						sendFullCard.push(user._id);
+					} else {
+						allSend = false;
+					}
+					continue;
+			}
+		}
+		
 
         // Basic template rendering data
-        const speakerName = eventData.newCombatant.name;
+        const speakerName = game.i18n.format("SFRPG.Combat.VehicleChase.Phases.3.Name");
         const templateData = {
             header: {
                 image: eventData.newCombatant.img,
@@ -511,7 +595,11 @@ export class CombatSFRPG extends Combat {
                 message: {
                     title: localizedPhaseName,
                     body: game.i18n.format(eventData.newPhase.description || "")
-                }
+                },
+				round: this.round,
+				phase: localizedPhaseName,
+				combatType: localizedCombatName,
+				turn: eventData.newCombatant.name
             },
             footer: {
                 content: game.i18n.format(CombatSFRPG.chatCardsText.footer, {combatType: localizedCombatName, combatPhase: localizedPhaseName})
@@ -520,17 +608,31 @@ export class CombatSFRPG extends Combat {
 
         // Render the chat card template
         const template = `systems/sfrpg/templates/chat/combat-card.hbs`;
+		const obfuscateTemplate = `systems/sfrpg/templates/chat/obfuscate-combat-card.hbs`;
         const html = await renderTemplate(template, templateData);
+		const obfuscateHtml = await renderTemplate(obfuscateTemplate, templateData);
 
         // Create the chat message
+		const chatWhisper = allSend ? sendFullCard : []:
+		
         const chatData = {
             type: CONST.CHAT_MESSAGE_TYPES.OTHER,
             speaker: ChatMessage.getSpeaker({ actor: eventData.newCombatant, token: eventData.newCombatant?.token, alias: speakerName }),
-            whisper: eventData.newCombatant.hidden ? ChatMessage.getWhisperRecipients("GM") : [],
+            whisper: chatWhisper,
             content: html
         };
 
-        await ChatMessage.create(chatData, { displaySheet: false });
+        await ChatMessage.create(chatData, { displaySheet: false, markerType:"turn" });
+		
+		//If we have an obfuscated message, send that too.
+		if (sendObfuscateCard.length) {
+			const obfuscateData = {
+				type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+				whisper: sendObfuscateCard,
+				content: obfuscateHtml
+			};
+			await ChatMessage.create(obfuscateData, { displaySheet: false, markerType:"turn" });
+		}
     }
 
     getCombatType() {
@@ -910,6 +1012,18 @@ Hooks.on('renderCombatTracker', (app, html, data) => {
             diffObject.render(true);
         });
     }
+});
+
+Hooks.on("createChatMessage", (message, options, user) => {
+	if (options.markerType) {
+		message.setFlag('sfrpg', 'markerType', options.markerType);
+	}
+});
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+	if (message.getFlag('sfrpg', 'markerType')) {
+		html.addClass('sfrpg-marker-' + message.getFlag('sfrpg', 'markerType'));
+	}
 });
 
 CombatSFRPG.colors = {

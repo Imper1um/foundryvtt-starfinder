@@ -1,0 +1,14 @@
+<div class="sfrpg chat-card phase-marker" {{#if body.phase}}data-phase="{{body.phase}}"{{/if}} {{#if body.backgroundColor}}style="background-color:{{body.backgroundColor}}"{{/if}}>
+    <header class="card-header flexrow">
+        <h3 class="item-name noborder">{{localize "SFRPG.AbilityActivationTypesRound"}} {{body.phase}}</h3>
+    </header>
+
+    <div class="card-content">
+        <h2 {{#if body.headerColor}}style="background-color:{{body.headerColor}}"{{/if}}>{{body.header}}</h2>
+    </div>
+
+    <footer class="card-footer" style="display:flex">
+		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}} {{localize "SFRPG.Combat.Normal.Phases.1.Name"}}</div>{{/if}}
+        {{footer.content}}
+    </footer>
+</div>

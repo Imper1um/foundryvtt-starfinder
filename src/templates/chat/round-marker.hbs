@@ -1,0 +1,16 @@
+<div class="sfrpg chat-card round-marker" {{#if body.round}}data-round="{{body.round}}"{{/if}} {{#if body.backgroundColor}}style="background-color:{{body.backgroundColor}}"{{/if}}>
+    <header class="card-header flexrow">
+        <h3 class="item-name noborder">{{localize "SFRPG.AbilityActivationTypesRound"}} {{body.round}}</h3>
+    </header>
+
+    <div class="card-content">
+        <h2 {{#if body.headerColor}}style="background-color:{{body.headerColor}}"{{/if}}>{{body.header}}</h2>
+        
+    </div>
+
+    <footer class="card-footer" style="display:flex">
+		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}} {{localize "SFRPG.Combat.Normal.Phases.1.Name"}}</div>{{/if}}
+		{{#if body.phase}}<div style="flex:1" class="round-footer-item phase" data-phase="{{body.phase}}">{{localize "SFRPG.StarshipSheet.Actions.Header.Phase"}} {{body.phase}}</div>{{/if}}
+		{{#if footer.content}}<div style="flex:3" class="round-footer-item extraInfo">{{footer.content}}</div>
+    </footer>
+</div>
