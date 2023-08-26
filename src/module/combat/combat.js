@@ -425,6 +425,7 @@ export class CombatSFRPG extends Combat {
     async _printNewRoundChatCard(eventData) {
         const localizedCombatName = this.getCombatName();
         const localizedPhaseName = game.i18n.format(eventData.newPhase.name);
+		const round = Math.max(1, this.round); //Prevents Round 0 when Combat starts.
 
         // Basic template rendering data
         const speakerName = game.i18n.format(CombatSFRPG.chatCardsText.speaker.GM);
@@ -435,7 +436,7 @@ export class CombatSFRPG extends Combat {
             body: {
                 header: game.i18n.format(CombatSFRPG.chatCardsText.round.bodyHeader),
                 headerColor: CombatSFRPG.colors.round,
-				round: this.round,
+				round: round,
 				phase: localizedPhaseName,
 				combatType: localizedCombatName
             }
@@ -458,6 +459,7 @@ export class CombatSFRPG extends Combat {
     async _printNewPhaseChatCard(eventData) {
         const localizedCombatName = this.getCombatName();
         const localizedPhaseName = game.i18n.format(eventData.newPhase.name);
+		const round = Math.max(1, this.round); //Prevents Round 0 when Combat starts.
 
         // Basic template rendering data
         const speakerName = game.i18n.format(CombatSFRPG.chatCardsText.speaker.GM);
@@ -472,7 +474,7 @@ export class CombatSFRPG extends Combat {
                     title: game.i18n.format(CombatSFRPG.chatCardsText.phase.messageTitle),
                     body: game.i18n.format(eventData.newPhase.description || "")
                 },
-				round: this.round,
+				round: round,
 				phase: localizedPhaseName,
 				combatType: localizedCombatName
             }
@@ -495,6 +497,7 @@ export class CombatSFRPG extends Combat {
     async _printNewTurnChatCard(eventData) {
         const localizedCombatName = this.getCombatName();
         const localizedPhaseName = game.i18n.format(eventData.newPhase.name);
+		const round = Math.max(1, this.round); //Prevents Round 0 when Combat starts.
 		
 		const newCombatant = eventData.newCombatant;
 		//-2 Secret, -1 Enemy, 0 Neutral, 1 Friendly
@@ -541,7 +544,7 @@ export class CombatSFRPG extends Combat {
 					//Assistant GM.
 					if (ownershipValue === 4 && allowOwned) {
 						sendFullCard.push(user._id);
-					} else if (obfuscatePermission === "Assistant" || obfuscatePermission === "Trusted" || obfuscatePermission === "Player") {
+					} else if (obfuscatePermission === "Assistant") {
 						allSend = false;
 						sendObfuscateCard.push(user._id);
 					} else if (displayPermission === "Assistant" || displayPermission === "Trusted" || displayPermission === "Player") {
@@ -554,7 +557,7 @@ export class CombatSFRPG extends Combat {
 					//Trusted Player.
 					if (ownershipValue === 4 && allowOwned) {
 						sendFullCard.push(user._id);
-					} else if (obfuscatePermission === "Trusted" || obfuscatePermission === "Player") {
+					} else if (obfuscatePermission === "Assistant" || obfuscatePermission === "Trusted") {
 						allSend = false;
 						sendObfuscateCard.push(user._id);
 					} else if (displayPermission === "Trusted" || displayPermission === "Player") {
@@ -567,7 +570,7 @@ export class CombatSFRPG extends Combat {
 					//Player.
 					if (ownershipValue === 4 && allowOwned) {
 						sendFullCard.push(user._id);
-					} else if (obfuscatePermission === "Player") {
+					} else if (obfuscatePermission === "Player" || obfuscatePermission === "Trusted" || obfuscatePermission === "Assistant") {
 						allSend = false;
 						sendObfuscateCard.push(user._id);
 					} else if (displayPermission === "Player") {
@@ -594,7 +597,7 @@ export class CombatSFRPG extends Combat {
                     title: localizedPhaseName,
                     body: game.i18n.format(eventData.newPhase.description || "")
                 },
-				round: this.round,
+				round: round,
 				phase: localizedPhaseName,
 				combatType: localizedCombatName,
 				turn: eventData.newCombatant.name
@@ -1013,7 +1016,7 @@ Hooks.on('renderCombatTracker', (app, html, data) => {
 });
 
 Hooks.on("createChatMessage", (message, options, user) => {
-	if (options.markerType) {
+	if (options.markerType && game.user.isGM) {
 		message.setFlag('sfrpg', 'markerType', options.markerType);
 	}
 });
