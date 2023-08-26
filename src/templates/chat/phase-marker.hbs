@@ -9,6 +9,7 @@
 
     <footer class="card-footer" style="display:flex">
 		{{#if body.combatType}}<div style="flex:1" class="round-footer-item combatType" data-combat-type="{{body.combatType}}">{{body.combatType}}</div>{{/if}}
+		{{#if body.round}}<div style="flex:1" class="round-footer-item round" data-round="{{body.round}}">{{localize "SFRPG.AbilityActivationTypesRound"}} {{body.round}}</div>{{/if}}
         {{footer.content}}
     </footer>
 </div>
